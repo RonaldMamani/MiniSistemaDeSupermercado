@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "nome": "Arroz",
+        "quantidade": 50,
+        "preco": 16
+    },
+    {
+        "id": 2,
+        "nome": "Feijão",
+        "quantidade": 30,
+        "preco": 8.5
+    },
+    {
+        "id": 3,
+        "nome": "Macarrão",
+        "quantidade": 20,
+        "preco": 4
+    },
+    {
+        "id": 4,
+        "nome": "Óleo",
+        "quantidade": 15,
+        "preco": 5.5
+    },
+    {
+        "id": 5,
+        "nome": "Açúcar",
+        "quantidade": 25,
+        "preco": 3
+    },
+    {
+        "id": 6,
+        "nome": "Sal",
+        "quantidade": 40,
+        "preco": 1.5
+    },
+    {
+        "id": 7,
+        "nome": "Farinha de Trigo",
+        "quantidade": 10,
+        "preco": 2
+    },
+    {
+        "id": 8,
+        "nome": "Leite",
+        "quantidade": 60,
+        "preco": 3.5
+    },
+    {
+        "id": 9,
+        "nome": "Ovos",
+        "quantidade": 12,
+        "preco": 0.5
+    },
+    {
+        "id": 10,
+        "nome": "Frango",
+        "quantidade": 8,
+        "preco": 20
+    },
+    {
+        "id": 11,
+        "nome": "Carne Bovina",
+        "quantidade": 5,
+        "preco": 35
+    },
+    {
+        "id": 12,
+        "nome": "Peixe",
+        "quantidade": 7,
+        "preco": 25
+    },
+    {
+        "id": 13,
+        "nome": "Maçã",
+        "quantidade": 45,
+        "preco": 2.5
+    },
+    {
+        "id": 14,
+        "nome": "Banana",
+        "quantidade": 55,
+        "preco": 1.2
+    },
+    {
+        "id": 15,
+        "nome": "Laranja",
+        "quantidade": 35,
+        "preco": 1.8
+    }
+]
