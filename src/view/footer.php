@@ -1,5 +1,8 @@
-        </main>
-        <footer class="bg-gray-100 text-gray-600 p-4 text-center">
-            <p>&copy; <?= date('Y') ?> Supermercado. Todos os direitos reservados.</p>
-    </body>
-    </html>
+        </div> 
+        </main> 
+        <footer class="bg-blue-600 p-4 text-white text-center mt-8 shadow-md w-full"> 
+                <p>&copy; <?= date('Y') ?> Sistema Supermercado. Todos os direitos reservados.</p>
+        </footer>
+
+</body>
+</html>
