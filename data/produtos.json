@@ -2,7 +2,7 @@
     {
         "id": 1,
         "nome": "Arroz",
-        "quantidade": 49,
+        "quantidade": 47,
         "preco": 16
     },
     {
@@ -88,5 +88,11 @@
         "nome": "Laranja",
         "quantidade": 35,
         "preco": 1.8
+    },
+    {
+        "id": 16,
+        "nome": "Cebola",
+        "quantidade": 55,
+        "preco": 2
     }
 ]

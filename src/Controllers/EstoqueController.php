@@ -18,6 +18,7 @@ class EstoqueController {
             exit();
         }
 
+        // Processa ações POST específicas do Estoque
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($action) {
                 case 'adicionar':
@@ -46,12 +47,13 @@ class EstoqueController {
             exit();
         }
 
+        // Renderiza a página do Estoque
         $this->renderEstoquePage();
     }
 
     private function adicionarProduto($nome, $quantidade, $preco) {
         $solicitacao = $this->solicitacoesHandler->ler();
-
+        // Usando a sintaxe compatível com PHP 5.x
         $liberado_estoque = isset($solicitacao['Liberado_estoque']) ? $solicitacao['Liberado_estoque'] : false;
 
         if (!$liberado_estoque) {
@@ -79,7 +81,7 @@ class EstoqueController {
 
     private function editarProduto($id, $nome, $quantidade, $preco) {
         $solicitacao = $this->solicitacoesHandler->ler();
-
+        // Usando a sintaxe compatível com PHP 5.x
         $liberado_estoque = isset($solicitacao['Liberado_estoque']) ? $solicitacao['Liberado_estoque'] : false;
 
         if (!$liberado_estoque) {
@@ -108,7 +110,7 @@ class EstoqueController {
 
     private function deletarProduto($id) {
         $solicitacao = $this->solicitacoesHandler->ler();
-
+        // Usando a sintaxe compatível com PHP 5.x
         $liberado_estoque = isset($solicitacao['Liberado_estoque']) ? $solicitacao['Liberado_estoque'] : false;
 
         if (!$liberado_estoque) {
@@ -124,7 +126,7 @@ class EstoqueController {
         $produtos = $this->produtosHandler->ler();
         $produtos_filtrados = array_filter($produtos, function($p) use ($id) { return $p['id'] != $id; });
         if (count($produtos_filtrados) < count($produtos)) {
-            $this->produtosHandler->escrever(array_values($produtos_filtrados));
+            $this->produtosHandler->escrever(array_values($produtos_filtrados)); // Reindexa o array
             flash_message('success', 'Produto deletado com sucesso!');
         } else {
             flash_message('error', 'Erro: Produto não encontrado para deleção.');
@@ -142,15 +144,16 @@ class EstoqueController {
         // Prepara os dados que serão exibidos na View
         $produtos = $this->produtosHandler->ler();
         $solicitacao = $this->solicitacoesHandler->ler();
-
+        // Usando a sintaxe compatível com PHP 5.x
         $liberado_estoque = isset($solicitacao['Liberado_estoque']) ? $solicitacao['Liberado_estoque'] : false;
         $solicitacao_pendente = isset($solicitacao['solicitacao_pendente']) ? $solicitacao['solicitacao_pendente'] : false;
 
-
+        // --- NOVO: Torna as variáveis $autenticacao e $perfil disponíveis para o header.php ---
         $autenticacao = $this->autenticacao;
         $perfil = $autenticacao->obterPerfil();
+        // --- FIM NOVO ---
 
-        // Inclui os arquivos de visualização necessários
+        // Inclui as partes da página
         require_once __DIR__ . '/../Views/header.php';
         require_once __DIR__ . '/../Views/estoque.php';
         require_once __DIR__ . '/../Views/footer.php';

@@ -48,6 +48,7 @@ class FinanceiroController {
     }
 
     private function renderFinanceiroPage() {
+        
         $solicitacao = $this->solicitacoesHandler->ler();
 
         $liberado_estoque = isset($solicitacao['Liberado_estoque']) ? $solicitacao['Liberado_estoque'] : false;
