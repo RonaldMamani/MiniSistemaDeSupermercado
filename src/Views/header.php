@@ -2,7 +2,6 @@
 
 $usuario_logado = isset($autenticacao) && $autenticacao->estaLogado() ? $autenticacao->obterUsuario() : 'Convidado';
 
-// Garante que $perfil seja uma string, mesmo que não esteja definido ou seja nulo do controller.
 $perfil_display = '';
 if (isset($autenticacao) && $autenticacao->estaLogado()) {
     $perfil_from_auth = $autenticacao->obterPerfil();
@@ -29,7 +28,7 @@ if (isset($autenticacao) && $autenticacao->estaLogado()) {
                 <div class="flex items-center space-x-4">
                     <span class="text-lg">Olá, <span class="font-semibold"><?= htmlspecialchars(ucfirst($usuario_logado)) ?></span> (<span class="font-semibold"><?= htmlspecialchars($perfil_display) ?></span>)</span>
                     <a href="index.php?logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center gap-2">
-                        Sair
+                        <i class="fas fa-sign-out-alt"></i> Sair
                     </a>
                 </div>
             <?php endif; ?>

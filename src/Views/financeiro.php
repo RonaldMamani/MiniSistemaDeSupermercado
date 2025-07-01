@@ -47,8 +47,8 @@ if ($liberado_estoque) {
                     </button>
                 </form>
             </div>
-        <?php else: ?>
-            <?php if (!$solicitacao_pendente): ?>
+        <?php else: // Se não estiver liberado, pode estar bloqueado sem solicitação ou com solicitação pendente ?>
+            <?php if (!$solicitacao_pendente): // Apenas exibe o botão de bloquear se já não estiver bloqueado E não houver solicitação pendente ?>
                 <div class="bg-red-50 p-4 rounded-lg shadow-inner flex flex-col items-center">
                     <p class="text-red-800 font-semibold mb-4 text-center">O acesso do Estoque está bloqueado.</p>
                     <p class="text-sm text-gray-500">Aguardando solicitação ou decisão.</p>

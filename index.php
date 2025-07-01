@@ -8,8 +8,7 @@ function flash_message($name, $message = '') {
     } elseif (isset($_SESSION['flash_message'][$name])) {
         $msg = $_SESSION['flash_message'][$name];
         unset($_SESSION['flash_message'][$name]);
-        $class = ($name === 'success') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-        return "<div class='p-4 mb-4 rounded-lg text-center font-semibold {$class}'>{$msg}</div>";
+        return "<div>{$msg}</div>";
     }
     return '';
 }

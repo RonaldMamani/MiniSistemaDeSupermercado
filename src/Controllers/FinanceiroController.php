@@ -9,8 +9,8 @@ class FinanceiroController {
         $this->solicitacoesHandler = $solicitacoesHandler;
     }
 
-    public function handleRequest($action = null){
-        if(!this->autenticacao->estaLogado() || $this->autenticacao->obterPerfil() !== 'financeiro' && $this->autenticacao->obterPerfil() !== 'admin') {
+    public function handleRequest($action = null) {
+        if (!$this->autenticacao->estaLogado() || ($this->autenticacao->obterPerfil() !== 'financeiro' && $this->autenticacao->obterPerfil() !== 'admin')) {
             header('Location: index.php');
             exit();
         }
@@ -33,7 +33,7 @@ class FinanceiroController {
 
     private function aprovarAcesso() {
         $solicitacao = $this->solicitacoesHandler->ler();
-        $solicitacao['Liberado_financeiro'] = true;
+        $solicitacao['Liberado_estoque'] = true;
         $solicitacao['solicitacao_pendente'] = false;
         $this->solicitacoesHandler->escrever($solicitacao);
         flash_message('success', 'Acesso ao estoque aprovado!');
@@ -41,15 +41,16 @@ class FinanceiroController {
 
     private function bloquearAcesso() {
         $solicitacao = $this->solicitacoesHandler->ler();
-        $solicitacao['Liberado_financeiro'] = false;
-        $solicitacao['solicitacao_pendente'] = true;
+        $solicitacao['Liberado_estoque'] = false;
+        $solicitacao['solicitacao_pendente'] = false;
         $this->solicitacoesHandler->escrever($solicitacao);
         flash_message('success', 'Acesso ao estoque bloqueado!');
     }
 
     private function renderFinanceiroPage() {
         $solicitacao = $this->solicitacoesHandler->ler();
-        $liberado_financeiro = isset($solicitacao['Liberado_financeiro']) ? $solicitacao['Liberado_financeiro'] : false;
+
+        $liberado_estoque = isset($solicitacao['Liberado_estoque']) ? $solicitacao['Liberado_estoque'] : false;
         $solicitacao_pendente = isset($solicitacao['solicitacao_pendente']) ? $solicitacao['solicitacao_pendente'] : false;
 
         $autenticacao = $this->autenticacao;
@@ -59,5 +60,4 @@ class FinanceiroController {
         require_once __DIR__ . '/../Views/financeiro.php';
         require_once __DIR__ . '/../Views/footer.php';
     }
-
 }

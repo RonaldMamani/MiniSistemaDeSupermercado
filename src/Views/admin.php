@@ -1,4 +1,6 @@
 <?php
+
+// Reutiliza a lógica de status do Financeiro para exibição
 $status_acesso_class = 'bg-gray-100 text-gray-800';
 $status_acesso_text = 'Status Desconhecido';
 
@@ -44,7 +46,7 @@ if ($liberado_estoque) {
                     </button>
                 </form>
             </div>
-        <?php else:?>
+        <?php else: // Bloqueado e sem solicitação pendente ?>
             <div class="bg-red-50 p-4 rounded-lg shadow-inner flex flex-col items-center">
                 <p class="text-red-800 font-semibold mb-4 text-center">Acesso do Estoque está bloqueado.</p>
                 <p class="text-sm text-gray-500">Sem solicitação pendente.</p>
@@ -52,11 +54,10 @@ if ($liberado_estoque) {
         <?php endif; ?>
     </div>
 
-    <div class="bg-white p-6 rounded-lg shadow-md mt-8">
-        <h3 class="text-2xl font-bold text-blue-600 border-b-2 border-blue-200 pb-2 mb-4">Visão Geral dos Produtos (Completo)</h3>
-        <p class="text-gray-700 mb-4">O Admin tem acesso total para visualizar e gerenciar o estoque.</p>
-        <?php
-            require_once __DIR__ . '/estoque.php';
-        ?>
-    </div>
+
+    <?php
+        // A variável $admin_override_estoque_permission deve ser definida como true pelo AdminController
+        // para que a view 'estoque.php' exiba todas as opções de gerenciamento.
+        require_once __DIR__ . '/estoque.php';
+    ?>
 </div>
