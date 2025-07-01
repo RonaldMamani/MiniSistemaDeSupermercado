@@ -2,7 +2,6 @@
 
 $usuario_logado = isset($autenticacao) && $autenticacao->estaLogado() ? $autenticacao->obterUsuario() : 'Convidado';
 
-// Garante que $perfil seja uma string, mesmo que não esteja definido ou seja nulo do controller.
 $perfil_display = '';
 if (isset($autenticacao) && $autenticacao->estaLogado()) {
     $perfil_from_auth = $autenticacao->obterPerfil();
