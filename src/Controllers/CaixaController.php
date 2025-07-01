@@ -11,7 +11,7 @@ class CaixaController {
 
     // Método principal para lidar com requisições GET e POST para o Caixa
     public function handleRequest($action = null) {
-        // Acesso restrito: Garante que apenas o perfil 'caixa' (ou 'admin' se permitido) acesse
+        // Acesso restrito: Garante que apenas o perfil 'caixa'
         if (!$this->autenticacao->estaLogado() || $this->autenticacao->obterPerfil() !== 'caixa') {
             header('Location: index.php');
             exit();

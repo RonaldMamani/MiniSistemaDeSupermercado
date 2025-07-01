@@ -10,23 +10,28 @@
 
         public function entrar($usuario, $senha) {
             if (isset($this->usuarios[$usuario]) && $this->usuarios[$usuario]['senha'] === $senha) {
-                $_SESSION['usuario'] = $usuario;
-                $_SESSION['perfil'] = $this->usuarios[$usuario]['perfil'];
+                $_SESSION['usuario_logado'] = $usuario;
+                $_SESSION['perfil_usuario'] = $this->usuarios[$usuario]['perfil'];
                 return true;
             }
             return false;
         }
 
         public function sair() {
+            session_start();
             session_destroy();
         }
 
         public function estaLogado() {
-            return isset($_SESSION['perfil']);
+            return isset($_SESSION['usuario_logado']);
         }
 
         public function obterPerfil() {
-            return isset($_SESSION['perfil']) ? $_SESSION['perfil'] : null;
+            return isset($_SESSION['perfil_usuario']) ? $_SESSION['perfil_usuario'] : null;
+        }
+
+        public function obterUsuario() {
+            return isset($_SESSION['usuario_logado']) ? $_SESSION['usuario_logado'] : null;
         }
     }
 

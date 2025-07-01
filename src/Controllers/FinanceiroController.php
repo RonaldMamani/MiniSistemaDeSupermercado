@@ -17,11 +17,11 @@ class FinanceiroController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($action) {
-                case 'solicitar_acesso':
-                    $this->solicitarAcesso();
+                case 'aprovar_acesso':
+                    $this->aprovarAcesso();
                     break;
-                case 'liberar_acesso':
-                    $this->liberarAcesso();
+                case 'bloquear_acesso':
+                    $this->bloquearAcesso();
                     break;
             }
             header('Location: index.php');

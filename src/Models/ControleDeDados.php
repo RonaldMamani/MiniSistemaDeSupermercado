@@ -2,22 +2,30 @@
 
     class ControleDeDados {
 
-        private $filePath;
+        private $caminhoArquivo;
 
-        public function __construct($filePath) {
-            $this->filePath = $filePath;
-            if (!file_exists($this->filePath)) {
-                file_put_contents($this->filePath, json_encode([], JSON_UNESCAPED_UNICODE));
+        public function __construct($caminhoArquivo) {
+            $this->caminhoArquivo = $caminhoArquivo;
+            if (!file_exists($this->caminhoArquivo)) {
+                file_put_contents($this->caminhoArquivo, json_encode([], JSON_UNESCAPED_UNICODE));
             }
         }
 
         public function ler() {
-            $conteudo = file_get_contents($this->filePath);
-            return json_decode($conteudo, true);
+            if (!file_exists($this->filePath)) {
+                return [];
+            }
+            $conteudo = file_get_contents($this->caminhoArquivo);
+            $dados = json_decode($conteudo, true);
+            return $dados !== null ? $dados : [];
         }
 
-        public function escrever($dados) {
-            file_put_contents($this->filePath, json_encode($dados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        public function escrever(array $dados) {
+            $diretorio = dirname($this->caminhoArquivo);
+            if (!is_dir($diretorio)) {
+                mkdir($diretorio, 0777, true);
+            }
+            file_put_contents($this->caminhoArquivo, json_encode($dados, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
     }
 
