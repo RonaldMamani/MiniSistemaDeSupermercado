@@ -12,7 +12,7 @@ class AdminController {
     }
 
     public function handleRequest($action = null) {
-
+        // Acesso restrito
         if (!$this->autenticacao->estaLogado() || $this->autenticacao->obterPerfil() !== 'admin') {
             header('Location: index.php');
             exit();
@@ -21,14 +21,14 @@ class AdminController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($action) {
                 case 'adicionar':
-                    $this->produtosHandler->adicionarProduto(
+                    $this->adicionarProduto(
                         isset($_POST['nome']) ? $_POST['nome'] : null,
                         isset($_POST['quantidade']) ? $_POST['quantidade'] : null,
                         isset($_POST['preco']) ? $_POST['preco'] : null
                     );
                     break;
                 case 'editar':
-                    $this->produtosHandler->editarProduto(
+                    $this->editarProduto(
                         isset($_POST['id']) ? $_POST['id'] : null,
                         isset($_POST['nome']) ? $_POST['nome'] : null,
                         isset($_POST['quantidade']) ? $_POST['quantidade'] : null,
@@ -36,12 +36,10 @@ class AdminController {
                     );
                     break;
                 case 'deletar':
-                    $this->produtosHandler->deletarProduto(isset($_POST['id']) ? $_POST['id'] : null);
+                    $this->deletarProduto(isset($_POST['id']) ? $_POST['id'] : null);
                     break;
+
                 case 'solicitar_acesso':
-                    $this->solicitarAcesso();
-                    break;
-                case 'liberar_acesso':
                     $this->solicitarAcesso();
                     break;
                 case 'aprovar_acesso':
@@ -49,6 +47,7 @@ class AdminController {
                     break;
                 case 'bloquear_acesso':
                     $this->bloquearAcesso();
+                    break;
             }
             header('Location: index.php');
             exit();
@@ -58,17 +57,17 @@ class AdminController {
     }
 
     private function adicionarProduto($nome, $quantidade, $preco) {
-        if (empty($nome) || empty($quantidade) || empty($preco)) {
-            flash_message('error', 'Erro: Todos os campos são obrigatórios para adicionar um produto.');
+        if (empty($nome) || !is_numeric($quantidade) || !is_numeric($preco)) {
+            flash_message('error', 'Erro: Dados inválidos para adicionar produto.');
             return;
         }
 
         $produtos = $this->produtosHandler->ler();
-        $ultimo_id = end($produtos)['id'];
-        $novoId = !empty($ultimo_id) ? $ultimo_id + 1 : 1;
-        $novo_produto = [
-            'id' => count($produtos) + 1,
-            'nome' => $nome,
+        $ultimoProduto = end($produtos);
+        $novoId = !empty($ultimoProduto) ? $ultimoProduto['id'] + 1 : 1;
+        $produtos[] = [
+            'id' => $novoId,
+            'nome' => htmlspecialchars($nome),
             'quantidade' => (int)$quantidade,
             'preco' => (float)$preco
         ];
@@ -77,17 +76,17 @@ class AdminController {
     }
 
     private function editarProduto($id, $nome, $quantidade, $preco) {
-        if (empty($id) || empty($nome) || empty($quantidade) || empty($preco)) {
-            flash_message('error', 'Erro: Todos os campos são obrigatórios para editar um produto.');
+        if (empty($id) || empty($nome) || !is_numeric($quantidade) || !is_numeric($preco)) {
+            flash_message('error', 'Erro: Dados inválidos para editar produto.');
             return;
         }
 
         $produtos = $this->produtosHandler->ler();
-        foreach ($produtos as &$produto) {
-            if ($produto['id'] == $id) {
-                $produto['nome'] = $nome;
-                $produto['quantidade'] = (int)$quantidade;
-                $produto['preco'] = (float)$preco;
+        foreach ($produtos as &$p) {
+            if ($p['id'] == $id) {
+                $p['nome'] = htmlspecialchars($nome);
+                $p['quantidade'] = (int)$quantidade;
+                $p['preco'] = (float)$preco;
                 $this->produtosHandler->escrever($produtos);
                 flash_message('success', 'Produto atualizado com sucesso!');
                 return;
@@ -105,7 +104,7 @@ class AdminController {
         $produtos = $this->produtosHandler->ler();
         $produtos_filtrados = array_filter($produtos, function($p) use ($id) { return $p['id'] != $id; });
         if (count($produtos_filtrados) < count($produtos)) {
-            $this->produtosHandler->escrever(array_values($produtos_filtrados)); // Reindexa o array
+            $this->produtosHandler->escrever(array_values($produtos_filtrados));
             flash_message('success', 'Produto deletado com sucesso!');
         } else {
             flash_message('error', 'Erro: Produto não encontrado para deleção.');
@@ -113,48 +112,40 @@ class AdminController {
     }
 
     private function solicitarAcesso() {
-        $solicitacoes = $this->solicitacoesHandler->ler();
-        if (empty($solicitacoes)) {
-            $solicitacoes = [];
-        }
-        $solicitacoes['solicitacao_pendente'] = true;
-        $this->solicitacoesHandler->escrever($solicitacoes);
-        flash_message('success', 'Solicitação de acesso enviada com sucesso!');
+        $solicitacao = $this->solicitacoesHandler->ler();
+        $solicitacao['solicitacao_pendente'] = true;
+        $this->solicitacoesHandler->escrever($solicitacao);
+        flash_message('success', 'Simulação de solicitação de acesso enviada (Admin).');
     }
 
     private function aprovarAcesso() {
-        $solicitacoes = $this->solicitacoesHandler->ler();
-        if (empty($solicitacoes)) {
-            flash_message('error', 'Erro: Nenhuma solicitação pendente encontrada.');
-            return;
-        }
-        $solicitacoes['Liberado_estoque'] = true;
-        $solicitacoes['solicitacao_pendente'] = false;
-        $this->solicitacoesHandler->escrever($solicitacoes);
-        flash_message('success', 'Acesso ao estoque aprovado!');
+        $solicitacao = $this->solicitacoesHandler->ler();
+        $solicitacao['Liberado_estoque'] = true;
+        $solicitacao['solicitacao_pendente'] = false;
+        $this->solicitacoesHandler->escrever($solicitacao);
+        flash_message('success', 'Acesso ao estoque aprovado (Admin).');
     }
 
     private function bloquearAcesso() {
-        $solicitacoes = $this->solicitacoesHandler->ler();
-        if (empty($solicitacoes)) {
-            flash_message('error', 'Erro: Nenhuma solicitação pendente encontrada.');
-            return;
-        }
-        $solicitacoes['Liberado_estoque'] = false;
-        $solicitacoes['solicitacao_pendente'] = true;
-        $this->solicitacoesHandler->escrever($solicitacoes);
-        flash_message('success', 'Acesso ao estoque bloqueado!');
+        $solicitacao = $this->solicitacoesHandler->ler();
+        $solicitacao['Liberado_estoque'] = false;
+        $solicitacao['solicitacao_pendente'] = false;
+        $this->solicitacoesHandler->escrever($solicitacao);
+        flash_message('success', 'Acesso ao estoque bloqueado (Admin).');
     }
 
     private function renderAdminPage() {
+        
         $produtos = $this->produtosHandler->ler();
         $solicitacao = $this->solicitacoesHandler->ler();
-
+        
         $liberado_estoque = isset($solicitacao['Liberado_estoque']) ? $solicitacao['Liberado_estoque'] : false;
         $solicitacao_pendente = isset($solicitacao['solicitacao_pendente']) ? $solicitacao['solicitacao_pendente'] : false;
 
         $autenticacao = $this->autenticacao;
         $perfil = $autenticacao->obterPerfil();
+        
+        $admin_override_estoque_permission = true;
 
         require_once __DIR__ . '/../Views/header.php';
         require_once __DIR__ . '/../Views/admin.php';

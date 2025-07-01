@@ -8,13 +8,14 @@ function flash_message($name, $message = '') {
     } elseif (isset($_SESSION['flash_message'][$name])) {
         $msg = $_SESSION['flash_message'][$name];
         unset($_SESSION['flash_message'][$name]);
-        return "<div>{$msg}</div>";
+        $class = ($name === 'success') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+        return "<div class='p-4 mb-4 rounded-lg text-center font-semibold {$class}'>{$msg}</div>";
     }
     return '';
 }
 
 spl_autoload_register(function ($className) {
-    
+
     $baseDir = __DIR__ . '/src/';
 
     $prefixes = [
@@ -23,7 +24,6 @@ spl_autoload_register(function ($className) {
     ];
 
     foreach ($prefixes as $prefix => $directory) {
-
         $filePath = $directory . $className . '.php';
 
         if (file_exists($filePath)) {
@@ -33,18 +33,17 @@ spl_autoload_register(function ($className) {
     }
 });
 
+
 $autenticacao = new Autenticacao();
 $produtosHandler = new ControleDeDados(__DIR__ . '/data/produtos.json');
 $solicitacoesHandler = new ControleDeDados(__DIR__ . '/data/solicitacoes.json');
 
-// --- AÇÃO DE LOGOUT ---
 if (isset($_GET['logout'])) {
     $autenticacao->sair();
     header('Location: index.php');
     exit;
 }
 
-// --- LÓGICA DA TELA DE LOGIN ---
 if (!$autenticacao->estaLogado()) {
     $erro_login = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
@@ -82,6 +81,7 @@ switch ($perfil) {
 }
 
 if ($controller) {
+
     $action = isset($_POST['action']) ? $_POST['action'] : null;
     $controller->handleRequest($action);
 }
