@@ -12,13 +12,12 @@ class AdminController {
     }
 
     public function handleRequest($action = null) {
-        // Acesso restrito
+
         if (!$this->autenticacao->estaLogado() || $this->autenticacao->obterPerfil() !== 'admin') {
             header('Location: index.php');
             exit();
         }
 
-        // Processa ações POST específicas do Admin
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($action) {
                 case 'adicionar':
@@ -55,7 +54,6 @@ class AdminController {
             exit();
         }
 
-        // Renderiza a página do Admin
         $this->renderAdminPage();
     }
 
@@ -158,7 +156,6 @@ class AdminController {
         $autenticacao = $this->autenticacao;
         $perfil = $autenticacao->obterPerfil();
 
-        // Inclui os arquivos de visualização necessários
         require_once __DIR__ . '/../Views/header.php';
         require_once __DIR__ . '/../Views/admin.php';
         require_once __DIR__ . '/../Views/footer.php';

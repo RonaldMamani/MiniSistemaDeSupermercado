@@ -18,7 +18,6 @@ class EstoqueController {
             exit();
         }
 
-        // Processa ações POST específicas do Estoque
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($action) {
                 case 'adicionar':
@@ -47,7 +46,6 @@ class EstoqueController {
             exit();
         }
 
-        // Renderiza a página do Estoque
         $this->renderEstoquePage();
     }
 

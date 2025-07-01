@@ -9,15 +9,13 @@ class CaixaController {
         $this->produtosHandler = $produtosHandler;
     }
 
-    // Método principal para lidar com requisições GET e POST para o Caixa
     public function handleRequest($action = null) {
-        // Acesso restrito: Garante que apenas o perfil 'caixa'
+
         if (!$this->autenticacao->estaLogado() || $this->autenticacao->obterPerfil() !== 'caixa') {
             header('Location: index.php');
             exit();
         }
 
-        // Processa ações POST específicas do Caixa
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($action) {
                 case 'vender':
@@ -27,7 +25,7 @@ class CaixaController {
             header('Location: index.php');
             exit();
         }
-        // Renderiza a página do Caixa
+
         $this->renderCaixaPage();
     }
 
@@ -68,7 +66,6 @@ class CaixaController {
         $autenticacao = $this->autenticacao;
         $perfil = $autenticacao->obterPerfil();
 
-        // Inclui os arquivos de visualização necessários
         require_once __DIR__ . '/../Views/header.php';
         require_once __DIR__ . '/../Views/caixa.php';
         require_once __DIR__ . '/../Views/footer.php';

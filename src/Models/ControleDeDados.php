@@ -12,7 +12,7 @@
         }
 
         public function ler() {
-            if (!file_exists($this->filePath)) {
+            if (!file_exists($this->caminhoArquivo)) {
                 return [];
             }
             $conteudo = file_get_contents($this->caminhoArquivo);
